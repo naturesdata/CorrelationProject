@@ -1,0 +1,6 @@
+[submodule "DataClean"]
+	path = DataClean
+	url = https://github.com/naturesdata/DataClean.git
+[submodule "CorrelationAnalysis"]
+	path = CorrelationAnalysis
+	url = https://github.com/naturesdata/CorrelationAnalysis.git
