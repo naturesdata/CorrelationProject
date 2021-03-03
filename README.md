@@ -8,6 +8,7 @@
 6. [Completing The ADNIMERGE Data Domain](#header4)
 7. [Creating The Gene Expression Data Domain](#header5)
 8. [Creating The MRI Data Domain](#header6)
+9. [Creating The Final Data Set](#header7)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -160,5 +161,28 @@ To train the convolutional auto-encoders, execute the following:
 ```
 bash jobs/conv-autoencoder.sh 0 adni
 ```
-The 0 argument in the above command refers to the first slice index, meaning the model corresponding to the 0 slice index is trained. This same command must additionally be ran using a slice index of 1, 2, and all the way to 123. Note that each of these runs requires a 16 gigabyte GPU.
-
+The 0 argument in the above command refers to the first slice index, meaning the model corresponding to the 0 slice index is trained. This same command must additionally be ran using a slice index of 1, 2, and all the way to 123. **Note that each of these runs requires a 16 gigabyte GPU.**
+<br>
+Once the auto-encoders are trained, they can be used to compress the images into one-dimensional latent vectors which are concatenated together to become the rows in the table for the MRI domain. Execute the following to do this:
+```
+bash jobs/mri-table.sh adni
+```
+#### Run Time: 1 hour 52 minutes 36 seconds
+## Creating The Final Data Set <a name="header7"></a>
+**Creating the table for the MRI domain also uses a 16 gigabyte GPU but 128 gigabytes of CPU memory was allocated.** After the MRI data domain is complete, it can be merged with the ADNIMERGE domain and gene expression domain by executing the following:
+```
+bash jobs/combine.sh adni combined processed-data/datasets/adni/mri.csv
+```
+#### Run Time: 3 hours 32 minutes 53 seconds
+**The merging of the three domains required approximately over a terabyte of memory.** The final data set is now complete and ready for correlation analysis. Enter the data directory of the `CorrelationAnalysis` sub module by executing the following:
+```
+cd ../
+cd CorrelationAnalysis/data
+```
+Give the `CorrelationAnalysis` repo access to the cleaned data by using symbolic links to the `DataClean` sub module by executing the following:
+```
+ln -s ../../DataClean/processed-data/datasets/adni/combined-col-types.csv col-types.csv
+ln -s ../../DataClean/processed-data/datasets/adni/phenotypes-col-types.csv adnimerge-col-types.csv
+ln -s ../../DataClean/processed-data/datasets/adni/combined.csv data.csv
+cd ../
+```
