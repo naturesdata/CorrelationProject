@@ -256,3 +256,21 @@ Clinical dementia rating is also a potential confounding variable. The following
 bash jobs/create-subset.sh cdglobal
 ```
 #### Run Time: 1 minute 38 seconds
+Now that the sub sets have been created, the same analysis as before can be performed on the sub sets only for those comparisons which passed the Bonferroni corrected alpha:
+```
+bash jobs/col-comparison-subset.sh 0 0.0
+```
+#### Run Time: *ENTER RUN TIME HERE*
+In the data set, clinical dementia rating has numbers representing the categorical values with 0.0, 0.5, and 1.0 representing controls, mild cognitive impairment, and AD respectively. The 0.0 argument in the above command represents the healthy controls sub set that was created earlier. The above command must be executed using an argument of 0.5 and 1.0 as well. Additionally, the above command must be executed for each sex (i.e. male and female). Finally, each of those five commands must be ran for every index. The 0 argument in the above command represents the 0 index and the commands must be ran up to index 1293 for a total of 5 * 1294 = 6,470 total jobs.
+<br>
+After the analysis has been performed on each of the sub sets, the intermediate counts tables need to be created for each of them by executing the following:
+```
+bash jobs/inter-counts-table.sh 0.0-comp-dicts 1e-100 0 1 data-type 0.0
+```
+#### Run Time: *ENTER RUN TIME HERE*
+New "comp-dicts" directories will have been created in the `data` directory, including `0.0-comp-dicts`, `0.5-comp-dicts`, `1.0-comp-dicts`, `male-comp-dicts`, and `female-comp-dicts`. The above command uses `0.0-comp-dicts` as an argument but that command must be ran for each of the new "comp-dicts" directories. The 0 (fourth argument) is again an index and the above command must be ran from indices 0 to 1293 for each of the sub sets. The last argument in the command specifies the sub set where 0.0 is in the above command but the sub sets 0.5, 1.0, male, and female must also be ran. And again the data-type argument is used in the above command. All of the jobs mentioned before must additionally be ran using the domain argument for a total of 5 * 1294 * 2 = 12,940 jobs. Once all the intermediate counts tables are complete for all of the sub sets and for both the data-type and domain tables, they each can be added up into a final counts table by executing the following:
+```
+bash jobs/counts-table.sh data-type 0.0
+bash jobs/counts-table.sh domain 0.0
+```
+The 0.0 in the above commands again represents the 0.0 subset and the same commands must be ran for all the other sub sets as well. This concludes the counting and should result in ten additional counts tables.
