@@ -9,7 +9,7 @@
 7. [Creating The Gene Expression Data Domain](#header5)
 8. [Creating The MRI Data Domain](#header6)
 9. [Creating The Final Data Set](#header7)
-10.[Preparing For The Correlation Analysis](#header8)
+10. [Preparing For The Correlation Analysis](#header8)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
