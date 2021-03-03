@@ -10,6 +10,7 @@
 8. [Creating The MRI Data Domain](#header6)
 9. [Creating The Final Data Set](#header7)
 10. [Preparing For The Correlation Analysis](#header8)
+11. [Performing The Correlation Analysis](#header9)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -197,3 +198,9 @@ The column types need to be known for the analysis because the type of each feat
 ```
 bash jobs/col-comparison-inputs.sh
 ```
+## Performing The Correlation Analysis <a name="header9"></a>
+This will create a CSV table containing the correct inputs for the correlation analysis ranging from job number 0 to job number 6468. The correlation analysis script uses that CSV file and a given job number to get its inputs for a given job. Below is the command for running the correlation analysis for job 0.
+```
+bash jobs/col-comparison-dict.sh data/data.csv data/col-comp-inputs.csv 0 3 comp-dicts
+```
+The 0 argument in the above command refers to the job number. This same command must be ran for all job numbers all the way to 6468. **Each job takes up to 128 gigabytes of memory, ranging from 1 to 5 hours of run time, most of which running to completion in below 2 hours. With several being able to run in parallel, completion of all these jobs may require approximately 10 and a half days.** All these jobs together perform billions of statistical tests each of which produces a p value for a feature pair that’s compared. Every feature in the data set is compared to every other feature after all 6,469 jobs are complete. The output of each job is a mapping from the comparison pair (two headers) to the p-value obtained performing the correlation test between that pair of features. All of these 6,469 mappings, **each of which consumes approximately 2.5 gigabytes of disk space**, combine to contain the entirety of comparisons throughout all the features in the data set which amounts to 360,843,389,481 total statistical tests. **This required a total of 16 terabytes of disk space.**
