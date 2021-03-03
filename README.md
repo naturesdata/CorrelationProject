@@ -5,6 +5,7 @@
 3. [Cloning The Project Repository](#header1)
 4. [Creating The Raw ADNIMERGE Data Domain](#header2)
 5. [Creating The Python Virtual Environment](#header3)
+6. [Completing The ADNIMERGE Data Domain](#header4)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -105,3 +106,11 @@ source env/bin/activate
 pip3 install -r requirements.txt
 deactivate
 ```
+## Completing The ADNIMERGE Data Domain <a name="header4"></a>
+The ADNIMERGE data domain goes through further processing (primarily imputing missing values) by executing the following:
+```
+cd DataClean/
+bash jobs/phenotypes.sh adni
+cd ..
+```
+#### Run Time: 1 hour 24 minutes 59 seconds
