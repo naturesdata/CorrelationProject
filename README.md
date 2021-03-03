@@ -11,6 +11,7 @@
 9. [Creating The Final Data Set](#header7)
 10. [Preparing For The Correlation Analysis](#header8)
 11. [Performing The Correlation Analysis](#header9)
+12. [Counting Comparisons For The Entire Data Set](#header10)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -204,3 +205,24 @@ This will create a CSV table containing the correct inputs for the correlation a
 bash jobs/col-comparison-dict.sh data/data.csv data/col-comp-inputs.csv 0 3 comp-dicts
 ```
 The 0 argument in the above command refers to the job number. This same command must be ran for all job numbers all the way to 6468. **Each job takes up to 128 gigabytes of memory, ranging from 1 to 5 hours of run time, most of which running to completion in below 2 hours. With several being able to run in parallel, completion of all these jobs may require approximately 10 and a half days.** All these jobs together perform billions of statistical tests each of which produces a p value for a feature pair that’s compared. Every feature in the data set is compared to every other feature after all 6,469 jobs are complete. The output of each job is a mapping from the comparison pair (two headers) to the p-value obtained performing the correlation test between that pair of features. All of these 6,469 mappings, **each of which consumes approximately 2.5 gigabytes of disk space**, combine to contain the entirety of comparisons throughout all the features in the data set which amounts to 360,843,389,481 total statistical tests. **This required a total of 16 terabytes of disk space.**
+## Counting Comparisons For The Entire Data Set <a name="header10"></a>
+The next scripts are involved in the search for significant comparisons by looking for low p values. To determine significance, we first must obtain a Bonferroni corrected alpha. This alpha can be found by executing the following:
+```
+bash jobs/bonferroni.sh
+```
+#### Run Time: 1 minute 3.298 seconds
+This script corrects the original alpha value of 0.05 simply by dividing the original alpha by the total number of tests performed which is 360,843,389,481. Once the corrected alpha is obtained, the test results can be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.3856426765061392e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
+```
+bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 data-type
+```
+#### Run Time: Ranging from about 1 day to 1.5 days
+The 0 argument refers to the job index similar to training the MRI autoencoders and performing all the statistical tests. This time there are a total of 1,294 jobs that need to be ran so the above command must be ran from job index 0 to job index 1293. The same thing must additionally be done for the domain counts table as compared to the data-type counts table. That can be done by executing the above command for each job index but this time replacing data-type with domain as seen below:
+```
+bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 domain
+```
+#### Run Time: Ranging from about 1 day to 1.5 days
+Rather than comparing counts by data type (numeric or nominal), this will create intermediate counts tables by domain (ADNIMERGE, Expression, or MRI). The counts in all the intermediate tables can be added together into one by executing the following:
+```
+bash jobs/counts-table.sh data-type
+bash jobs/counts-table.sh domain
+```
