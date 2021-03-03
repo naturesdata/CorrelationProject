@@ -13,6 +13,7 @@
 11. [Performing The Correlation Analysis](#header9)
 12. [Counting Comparisons For The Entire Data Set](#header10)
 13. [Counting Comparisons For The Confounding Variable Sub Sets](#header11)
+14. [Feature Frequency Of Highly Significant Comparisons](#header12)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -274,3 +275,18 @@ bash jobs/counts-table.sh data-type 0.0
 bash jobs/counts-table.sh domain 0.0
 ```
 The 0.0 in the above commands again represents the 0.0 subset and the same commands must be ran for all the other sub sets as well. This concludes the counting and should result in ten additional counts tables.
+## Feature Frequency Of Highly Significant Comparisons <a name="header12"></a>
+The next part of the analysis is to obtain the mapping of features to the frequency which they appear in significant comparisons. Before such a mapping can be created for features which appeared in maximally significant comparisons, we must filter the comparisons again but this time only selecting the maximally significant ones:
+```
+bash jobs/alpha-filter.sh comp-dicts maximum 0 5
+```
+The above command needs to be ran from index 0 to 1293 like before. The mappings for both Bonferroni significance and maximum significance can be made by executing the following:
+```
+bash jobs/significance-frequencies.sh bonferroni
+```
+#### Run Time: *ENTER RUN TIME HERE*
+```
+bash jobs/significance-frequencies.sh maximum
+```
+#### Run Time: 9 minutes 1.49 seconds
+This concludes the complete reproduction of the project.
