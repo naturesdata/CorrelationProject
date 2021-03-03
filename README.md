@@ -9,6 +9,7 @@
 7. [Creating The Gene Expression Data Domain](#header5)
 8. [Creating The MRI Data Domain](#header6)
 9. [Creating The Final Data Set](#header7)
+10.[Preparing For The Correlation Analysis](#header8)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -185,4 +186,14 @@ ln -s ../../DataClean/processed-data/datasets/adni/combined-col-types.csv col-ty
 ln -s ../../DataClean/processed-data/datasets/adni/phenotypes-col-types.csv adnimerge-col-types.csv
 ln -s ../../DataClean/processed-data/datasets/adni/combined.csv data.csv
 cd ../
+```
+## Preparing For The Correlation Analysis <a name="header8"></a>
+To get the column types in a form usable by the correlation analysis script, execute the column types script:
+```
+bash jobs/col-types.sh
+```
+### Run Time: 1 minute 2 seconds
+The column types need to be known for the analysis because the type of each feature determines which statistical test to perform. The correlation script, due to its big O squared complexity and the large input size, needs to be split up among a total of 6,469 jobs. The inputs to those jobs are computed in a complicated manner and therefore are computed in their own script. Execute that script with the following command:
+```
+bash jobs/col-comparison-inputs.sh
 ```
