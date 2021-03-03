@@ -7,6 +7,7 @@
 5. [Creating The Python Virtual Environment](#header3)
 6. [Completing The ADNIMERGE Data Domain](#header4)
 7. [Creating The Gene Expression Data Domain](#header5)
+8. [Creating The MRI Data Domain](#header6)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -128,3 +129,29 @@ cd DataClean/
 bash jobs/adni-expression.sh
 ```
 #### Run Time: 2 minutes 25.821 seconds
+## Creating The MRI Data Domain <a name="header6"></a>
+To begin creating the MRI data domain, the directories containing the image files can be found at https://ida.loni.usc.edu/ under Download -> Image Collections. There are 2,432 directories, the name of each corresponds to a patient ID. All of these directories must be moved to `./data/mri/raw-adni/` for later steps. Most of these images will be filtered by taking the intersect of patient IDs with the patient IDs of the other domains (i.e. ADNIMERGE and gene expression). This can be accomplished by first obtaining the intersecting patient IDs just between the ADNIMERGE data domain and gene expression data domain. 744 patient IDs intersect between these two domains, meaning they have 744 individuals in common. To create a file containing these intersecting patient IDs, execute the following:
+```
+bash jobs/ptids.sh adni
+```
+#### Run Time: 52.114 seconds
+Once the raw MRI data is in the correct data directory and the intersecting patient IDs are saved, the MRIs that have patient IDs that intersect with the prior saved patient IDs can be extracted and organized by executing the following:
+```
+bash jobs/med-adni-mri.sh
+```
+#### Run Time: 1 hour 1 minute 57 seconds
+A total of 743 patient IDs (only 1 less than before) intersect between all three data domains, so there will be 743 individuals in the final data set. Since we are filtering the non-intersecting individuals, there will therefore also be 743 individuals in the MRI data domain. We don’t bother filtering the patients in the other data domains firstly because we couldn’t know what the MRI patient IDs are beforehand and secondly creating the other domains is not nearly as computationally intensive as creating the MRI data. Besides, those non-intersecting individuals in the ADNIMERGE and gene expression domains will necessarily be filtered when the three data domains are merged into one.
+<br>
+The MRIs are of the DICOM file format, a common file format for medical images, which contains metadata in addition to the images themselves. These DICOM medical images are handled using the `Pydicom` python package. More information about DICOM files and the Pydicom package can be found at https://pydicom.github.io. The medical images, however, are not in a format that’s ideal for deep learning. They can be converted to PNG format by executing the following:
+```
+bash jobs/png-mri.sh adni
+```
+#### Run Time: 12 hours 24 minutes 29 seconds
+The medical images are converted to PNG format using a python package called `med2image`. More information about this package can be found at https://pypi.org/project/med2image/. After the images are organized and converted into a usable format, they then need to be further processed by executing the following:
+```
+bash jobs/txt-mri.sh adni
+```
+#### Run Time: 1 hours 14 minutes 3 seconds
+This processing includes normalizing, resizing, and splicing. The normalizing step is a simple min-max normalization of the pixel values. The resizing is performed using the OpenCV python package. The images are processed as multi-dimensional arrays provided by the `NumPy` python package. The splicing is necessary because there is not a single image per individual, but rather, a sequence of images. Sagital MRIs were captured in a sequence of images ranging from one side of the skull to the other. The first images in each sequence are of layers on one side, later images are of layers in the middle, and the last images are of the other side. These layers are known as slices. Different individuals in the data have different numbers of slices, so they have different numbers of images in their sequence. The smallest sequence length is 124 slices, and those individuals with larger sequence lengths have their sequences spliced to 124 for consistency. After being processed, the images are saved as txt files and are finally ready for the deep convolutional neural network.
+<br>
+Since the individual samples have sequences of images rather than single images, a separate convolutional autoencoder is trained for each slice index. Since there are 124 slices per individual, there are 124 slice indices, ranging from 0 to 123, where 0 refers to the first slice in the sequence and 123 refers to the last (zero-based numbering). As stated above, there is 743 individuals in the MRI data domain, each of which has their sequence from slices 0 to 123, so there are 743 index 0 images, 743 index 1 images, all the way to 743 index 123 images for a total of 743 * 124 = 92,132 images. Since there are 743 images for each slice index, and there is a separate trained autoencoder per slice index, each autoencoder is trained on 743 images.
