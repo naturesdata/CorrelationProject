@@ -4,6 +4,7 @@
 2. [Downloadable ADNI Files Needed](#table2)
 3. [Cloning The Project Repository](#header1)
 4. [Creating The Raw ADNIMERGE Data Domain](#header2)
+5. [Creating The Python Virtual Environment](#header3)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -95,4 +96,12 @@ cd ..
 This script uses the headers of the column types data frame to select the acceptable columns from the raw data set, then both data frames are saved as CSV files. This concludes the process for putting together the raw data set for the ADNIMERGE domain. Return to the root of the repository by executing:
 ```
 cd ../..
+```
+## Creating The Python Virtual Environment <a name="header3"></a>
+To set up the virtual environment for the python scripts, execute the following:
+```
+virtualenv -p `which python3` env
+source env/bin/activate
+pip3 install -r requirements.txt
+deactivate
 ```
