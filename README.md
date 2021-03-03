@@ -12,6 +12,7 @@
 10. [Preparing For The Correlation Analysis](#header8)
 11. [Performing The Correlation Analysis](#header9)
 12. [Counting Comparisons For The Entire Data Set](#header10)
+13. [Counting Comparisons For The Confounding Variable Sub Sets](#header11)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -226,3 +227,32 @@ Rather than comparing counts by data type (numeric or nominal), this will create
 bash jobs/counts-table.sh data-type
 bash jobs/counts-table.sh domain
 ```
+## Counting Comparisons For The Confounding Variable Sub Sets <a name="header11"></a>
+The counts tables give us valuable information including how many of the comparisons of a given type were of a specified significance level. However, we also need to know which comparisons were below a certain alpha (not just the number of comparisons but the comparisons themselves). We can filter the comparisons that were above the Bonferroni alpha, keeping those which are below the Bonferroni alpha, by executing the following:
+```
+bash jobs/alpha-filter.sh comp-dicts bonferroni 0 5
+```
+#### Run Time: Varies but typically between 10 to 40 minutes per job
+The 0 argument indicates the index of the section to perform, similar to the intermediate counts table jobs. This also needs to be performed from index 0 to index 1293 for a total of 1,294 jobs.
+<br>
+The output of these jobs will not all be the same size since different parts of the total set of comparisons had more significant comparisons than others. This means that some of the output files of the above 1294 jobs will have different sizes than others, which will make determining resource allocation of future analysis difficult. This can be resolved by rearranging the file contents such that they all have approximately equal size by executing the following:
+```
+bash jobs/even-filtered-dicts.sh bonferroni
+```
+#### Run Time: *ENTER RUN TIME HERE*
+Next link the maps of patient ID to feature value to the correlation analysis data directory:
+```
+cd data/
+ln -s ../../DataClean/processed-data/feat-maps/ ./feat-maps
+cd ../
+```
+This includes a mapping from patient ID to sex and one from patient ID to clinical dementia rating. These will be used to create the sub sets of the data set which only contain the patients which have a specified value for these two potentially confounding variables. There will be a sub set which only contains male patients and one which only contains female patients. Create these two subsets by executing the following:
+```
+bash jobs/create-subset.sh ptgender
+```
+#### Run Time: 1 minute 28 seconds
+Clinical dementia rating is also a potential confounding variable. The following command will split the data set into a subset for healthy controls, a subset for patients with mild cognitive impairment, and a subset for AD patients:
+```
+bash jobs/create-subset.sh cdglobal
+```
+#### Run Time: 1 minute 38 seconds
