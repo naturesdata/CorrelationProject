@@ -192,7 +192,7 @@ To get the column types in a form usable by the correlation analysis script, exe
 ```
 bash jobs/col-types.sh
 ```
-### Run Time: 1 minute 2 seconds
+#### Run Time: 1 minute 2 seconds
 The column types need to be known for the analysis because the type of each feature determines which statistical test to perform. The correlation script, due to its big O squared complexity and the large input size, needs to be split up among a total of 6,469 jobs. The inputs to those jobs are computed in a complicated manner and therefore are computed in their own script. Execute that script with the following command:
 ```
 bash jobs/col-comparison-inputs.sh
