@@ -6,6 +6,7 @@
 4. [Creating The Raw ADNIMERGE Data Domain](#header2)
 5. [Creating The Python Virtual Environment](#header3)
 6. [Completing The ADNIMERGE Data Domain](#header4)
+7. [Creating The Gene Expression Data Domain](#header5)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -114,3 +115,16 @@ bash jobs/phenotypes.sh adni
 cd ..
 ```
 #### Run Time: 1 hour 24 minutes 59 seconds
+## Creating The Gene Expression Data Domain <a name="header5"></a>
+The file `ADNI_Gene_Expression_Profile.zip` can be found at https://ida.loni.usc.edu/ under Download -> Genetic Data. It must be moved to `./data/gene_expression`. The contents can be extracted by executing the following:
+```
+cd data/gene_expression
+unzip ADNI_Gene_Expression_Profile.zip
+cd ../..
+```
+The gene expression data set can then be created by executing the following:
+```
+cd DataClean/
+bash jobs/adni-expression.sh
+```
+#### Run Time: 2 minutes 25.821 seconds
