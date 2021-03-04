@@ -199,18 +199,15 @@ The next scripts are involved in the search for significant comparisons by looki
 ```
 bash jobs/bonferroni.sh
 ```
-#### Run Time: 1 minute 3.298 seconds
-This script corrects the original alpha value of 0.05 simply by dividing the original alpha by the total number of tests performed which is 360,843,389,481. Once the corrected alpha is obtained, the test results can be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.3856426765061392e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
+This might take about a minute. This script corrects the original alpha value of 0.05 simply by dividing the original alpha by the total number of tests performed which is 360,843,389,481. Once the corrected alpha is obtained, the test results can be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.3856426765061392e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
 ```
 bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 data-type
 ```
-#### Run Time: Ranging from about 1 day to 1.5 days
-The 0 argument refers to the job index similar to training the MRI autoencoders and performing all the statistical tests. This time there are a total of 1,294 jobs that need to be ran so the above command must be ran from job index 0 to job index 1293. The same thing must additionally be done for the domain counts table as compared to the data-type counts table. That can be done by executing the above command for each job index but this time replacing data-type with domain as seen below:
+*See Table 1 in the supplemental materials under "Counting All The Comparisons By Data Type" for resource usage information for this command.* The 0 argument refers to the job index similar to training the MRI autoencoders and performing all the statistical tests. This time there are a total of 1,294 jobs that need to be ran so the above command must be ran from job index 0 to job index 1293. The same thing must additionally be done for the domain counts table as compared to the data-type counts table. That can be done by executing the above command for each job index but this time replacing data-type with domain as seen below:
 ```
 bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 domain
 ```
-#### Run Time: Ranging from about 1 day to 1.5 days
-Rather than comparing counts by data type (numeric or nominal), this will create intermediate counts tables by domain (ADNIMERGE, Expression, or MRI). The counts in all the intermediate tables can be added together into one by executing the following:
+*See Table 1 in the supplemental materials under "Counting All The Comparisons By Domain" for resource usage information for this command.* Rather than comparing counts by data type (numeric or nominal), this will create intermediate counts tables by domain (ADNIMERGE, Expression, or MRI). The counts in all the intermediate tables can be added together into one by executing the following:
 ```
 bash jobs/counts-table.sh data-type
 bash jobs/counts-table.sh domain
@@ -220,15 +217,13 @@ The counts tables give us valuable information including how many of the compari
 ```
 bash jobs/alpha-filter.sh comp-dicts bonferroni 0 5
 ```
-#### Run Time: Varies but typically between 10 to 40 minutes per job
-The 0 argument indicates the index of the section to perform, similar to the intermediate counts table jobs. This also needs to be performed from index 0 to index 1293 for a total of 1,294 jobs.
+*See Table 1 in the supplemental materials under "Filtering Comparisons By Bonferroni Alpha" for resource usage information for this command.* The 0 argument indicates the index of the section to perform, similar to the intermediate counts table jobs. This also needs to be performed from index 0 to index 1293 for a total of 1,294 jobs.
 <br>
 The output of these jobs will not all be the same size since different parts of the total set of comparisons had more significant comparisons than others. This means that some of the output files of the above 1294 jobs will have different sizes than others, which will make determining resource allocation of future analysis difficult. This can be resolved by rearranging the file contents such that they all have approximately equal size by executing the following:
 ```
 bash jobs/even-filtered-dicts.sh bonferroni
 ```
-#### Run Time: *ENTER RUN TIME HERE*
-Next link the maps of patient ID to feature value to the correlation analysis data directory:
+*See Table 1 in the supplemental materials under "Equalize The Size Of The Files Containing The Bonferroni Alpha Filtered Comparisons" for resource usage information for this command.* Next link the maps of patient ID to feature value to the correlation analysis data directory:
 ```
 cd data/
 ln -s ../../DataClean/processed-data/feat-maps/ ./feat-maps
@@ -238,25 +233,21 @@ This includes a mapping from patient ID to sex and one from patient ID to clinic
 ```
 bash jobs/create-subset.sh ptgender
 ```
-#### Run Time: 1 minute 28 seconds
-Clinical dementia rating is also a potential confounding variable. The following command will split the data set into a subset for healthy controls, a subset for patients with mild cognitive impairment, and a subset for AD patients:
+This might take up to two minutes. Clinical dementia rating is also a potential confounding variable. The following command will split the data set into a subset for healthy controls, a subset for patients with mild cognitive impairment, and a subset for AD patients:
 ```
 bash jobs/create-subset.sh cdglobal
 ```
-#### Run Time: 1 minute 38 seconds
-Now that the sub sets have been created, the same analysis as before can be performed on the sub sets only for those comparisons which passed the Bonferroni corrected alpha:
+This might take up to two minutes. Now that the sub sets have been created, the same analysis as before can be performed on the sub sets only for those comparisons which passed the Bonferroni corrected alpha:
 ```
 bash jobs/col-comparison-subset.sh 0 0.0
 ```
-#### Run Time: *ENTER RUN TIME HERE*
-In the data set, clinical dementia rating has numbers representing the categorical values with 0.0, 0.5, and 1.0 representing controls, mild cognitive impairment, and AD respectively. The 0.0 argument in the above command represents the healthy controls sub set that was created earlier. The above command must be executed using an argument of 0.5 and 1.0 as well. Additionally, the above command must be executed for each sex (i.e. male and female). Finally, each of those five commands must be ran for every index. The 0 argument in the above command represents the 0 index and the commands must be ran up to index 1293 for a total of 5 * 1294 = 6,470 total jobs.
+*See Table 1 in the supplemental materials under "Re-Run Only The Significant Comparisons On The Subsets" for resource usage information for this command.* In the data set, clinical dementia rating has numbers representing the categorical values with 0.0, 0.5, and 1.0 representing controls, mild cognitive impairment, and AD respectively. The 0.0 argument in the above command represents the healthy controls sub set that was created earlier. The above command must be executed using an argument of 0.5 and 1.0 as well. Additionally, the above command must be executed for each sex (i.e. male and female). Finally, each of those five commands must be ran for every index. The 0 argument in the above command represents the 0 index and the commands must be ran up to index 1293 for a total of 5 * 1294 = 6,470 total jobs.
 <br>
 After the analysis has been performed on each of the sub sets, the intermediate counts tables need to be created for each of them by executing the following:
 ```
 bash jobs/inter-counts-table.sh 0.0-comp-dicts 1e-100 0 1 data-type 0.0
 ```
-#### Run Time: *ENTER RUN TIME HERE*
-New "comp-dicts" directories will have been created in the `data` directory, including `0.0-comp-dicts`, `0.5-comp-dicts`, `1.0-comp-dicts`, `male-comp-dicts`, and `female-comp-dicts`. The above command uses `0.0-comp-dicts` as an argument but that command must be ran for each of the new "comp-dicts" directories. The 0 (fourth argument) is again an index and the above command must be ran from indices 0 to 1293 for each of the sub sets. The last argument in the command specifies the sub set where 0.0 is in the above command but the sub sets 0.5, 1.0, male, and female must also be ran. And again the data-type argument is used in the above command. All of the jobs mentioned before must additionally be ran using the domain argument for a total of 5 * 1294 * 2 = 12,940 jobs. Once all the intermediate counts tables are complete for all of the sub sets and for both the data-type and domain tables, they each can be added up into a final counts table by executing the following:
+*See Table 1 in the supplemental materials under "Count The Comparisons Of The Subset Analysis" for resource usage information for this command.* New "comp-dicts" directories will have been created in the `data` directory, including `0.0-comp-dicts`, `0.5-comp-dicts`, `1.0-comp-dicts`, `male-comp-dicts`, and `female-comp-dicts`. The above command uses `0.0-comp-dicts` as an argument but that command must be ran for each of the new "comp-dicts" directories. The 0 (fourth argument) is again an index and the above command must be ran from indices 0 to 1293 for each of the sub sets. The last argument in the command specifies the sub set where 0.0 is in the above command but the sub sets 0.5, 1.0, male, and female must also be ran. And again the data-type argument is used in the above command. All of the jobs mentioned before must additionally be ran using the domain argument for a total of 5 * 1294 * 2 = 12,940 jobs. Once all the intermediate counts tables are complete for all of the sub sets and for both the data-type and domain tables, they each can be added up into a final counts table by executing the following:
 ```
 bash jobs/counts-table.sh data-type 0.0
 bash jobs/counts-table.sh domain 0.0
@@ -267,13 +258,14 @@ The next part of the analysis is to obtain the mapping of features to the freque
 ```
 bash jobs/alpha-filter.sh comp-dicts maximum 0 5
 ```
-The above command needs to be ran from index 0 to 1293 like before. The mappings for both Bonferroni significance and maximum significance can be made by executing the following:
+*See Table 1 in the supplemental materials under "Filtering Comparisons By Maximum Alpha" for resource usage information for this command.* The above command needs to be ran from index 0 to 1293 like before. The mappings for both Bonferroni significance and maximum significance can be made by executing the following:
 ```
 bash jobs/significance-frequencies.sh bonferroni
 ```
-#### Run Time: *ENTER RUN TIME HERE*
+*See Table 1 in the supplemental materials under "Getting The Significant Comparison Frequencies For Features By Bonferroni Alpha" for resource usage information for this command.*
 ```
 bash jobs/significance-frequencies.sh maximum
 ```
-#### Run Time: 9 minutes 1.49 seconds
+This might take up to ten minutes.
+<br>
 This concludes the complete reproduction of the project.
