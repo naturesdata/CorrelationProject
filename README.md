@@ -212,6 +212,7 @@ bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 domain
 bash jobs/counts-table.sh data-type
 bash jobs/counts-table.sh domain
 ```
+The above commands might take about four minutes to complete.
 ## Counting Comparisons For The Confounding Variable Sub Sets <a name="header11"></a>
 The counts tables give us valuable information including how many of the comparisons of a given type were of a specified significance level. However, we also need to know which comparisons were below a certain alpha (not just the number of comparisons but the comparisons themselves). We can filter the comparisons that were above the Bonferroni alpha, keeping those which are below the Bonferroni alpha, by executing the following:
 ```
