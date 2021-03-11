@@ -267,6 +267,6 @@ bash jobs/significance-frequencies.sh bonferroni
 ```
 bash jobs/significance-frequencies.sh maximum
 ```
-This might take up to ten minutes.
+This might take up to eleven minutes.
 <br>
 This concludes the complete reproduction of the project.
