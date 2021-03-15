@@ -269,4 +269,13 @@ bash jobs/significance-frequencies.sh maximum
 ```
 This might take up to eleven minutes.
 <br>
+These results can be summarized by executing the following:
+```
+bash jobs/significance-summary.sh maximum 100
+```
+This might take less than a minute.
+```
+bash jobs/significance-summary.sh bonferroni 100
+```
+# TODO: Include resource/timing info here
 This concludes the complete reproduction of the project.
