@@ -5,9 +5,9 @@
 3. [Cloning The Project Repository](#header1)
 4. [Creating The Raw ADNIMERGE Data Domain](#header2)
 5. [Creating The Python Virtual Environment](#header3)
-6. [Completing The ADNIMERGE Data Domain](#header4)
-7. [Creating The Gene Expression Data Domain](#header5)
-8. [Creating The MRI Data Domain](#header6)
+6. [Creating The Gene Expression Data Domain](#header5)
+7. [Creating The MRI Data Domain](#header6)
+8. [Completing The ADNIMERGE Data Domain](#header4)
 9. [Creating The Final Data Set](#header7)
 10. [Preparing For The Correlation Analysis](#header8)
 11. [Performing The Correlation Analysis](#header9)
@@ -107,14 +107,6 @@ pip3 install -r requirements.txt
 deactivate
 ```
 This might take several minutes.
-## Completing The ADNIMERGE Data Domain <a name="header4"></a>
-The ADNIMERGE data domain goes through further processing (primarily imputing missing values) by executing the following:
-```
-cd DataClean/
-bash jobs/phenotypes.sh adni
-cd ..
-```
-*See Table 1 in the supplemental materials under "Imputing Missing Values In The ADNIMERGE Domain" for resource usage information for this command.*
 ## Creating The Gene Expression Data Domain <a name="header5"></a>
 The file `ADNI_Gene_Expression_Profile.zip` can be found at https://ida.loni.usc.edu/ under Download -> Genetic Data. It must be moved to `./data/gene_expression`. The contents can be extracted by executing the following:
 ```
@@ -162,6 +154,18 @@ Once the auto-encoders are trained, they can be used to compress the images into
 bash jobs/mri-table.sh adni
 ```
 *See Table 1 in the supplemental materials under "Creating The MRI Domain" for resource usage information for this command.*
+## Completing The ADNIMERGE Data Domain <a name="header4"></a>
+Before the ADNIMERGE data domain can be completed, it must have its instances filtered by intersecting patient IDs between its raw form, the gene expression data domain, and the MRI data domain. This is possible now that the MRI domain is complete and is necessary to impute missing values correctly. Run the patient IDs script again by executing the following:
+```
+bash jobs/ptids.sh adni
+```
+This might take about a minute. The ADNIMERGE data domain's final processing, including imputing missing values, can be completed by executing the following:
+```
+cd DataClean/
+bash jobs/phenotypes.sh adni
+cd ..
+```
+*See Table 1 in the supplemental materials under "Completing The ADNIMERGE Data Domain" for resource usage information for this command.* The command above additionally creates mappings from patient ID to confounding variable values to be used later.
 ## Creating The Final Data Set <a name="header7"></a>
 After the MRI data domain is complete, it can be merged with the ADNIMERGE domain and gene expression domain by executing the following:
 ```
