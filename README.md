@@ -199,7 +199,7 @@ bash jobs/col-comparison-inputs.sh
 ## Performing The Correlation Analysis <a name="header9"></a>
 This will create a CSV table containing the correct inputs for the correlation analysis ranging from job number 0 to job number 6417. The correlation analysis script uses that CSV file and a given job number to get its inputs for a given job. Below is the command for running the correlation analysis for job 0.
 ```
-bash jobs/col-comparison-dict.sh data/data.csv data/col-comp-inputs.csv 0 3 comp-dicts
+bash jobs/col-comparison-dict.sh data/data.csv data/col-comp-inputs.csv 0 4 comp-dicts
 ```
 *See Table 1 in the supplemental materials under "Correlation Analysis On The Entire Data Set" for resource usage information for this command.* The 0 argument in the above command refers to the job number. This same command must be ran for all job numbers all the way to 6417. All these jobs together perform billions of statistical tests each of which produces a p value for a feature pair that’s compared. Every feature in the data set is compared to every other feature after all 6,418 jobs are complete. The output of each job is a mapping from the comparison pair (two headers) to the p-value obtained performing the correlation test between that pair of features. All of these 6,418 mappings combine to contain the entirety of comparisons throughout all the features in the data set which amounts to 355,229,668,828 total statistical tests.
 ## Counting Comparisons For The Entire Data Set <a name="header10"></a>
