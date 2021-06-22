@@ -201,7 +201,12 @@ This will create a CSV table containing the correct inputs for the correlation a
 ```
 bash jobs/col-comparison-dict.sh data/data.csv data/col-comp-inputs.csv 0 4 comp-dicts
 ```
-*See Table 1 in the supplemental materials under "Correlation Analysis On The Entire Data Set" for resource usage information for this command.* The 0 argument in the above command refers to the job number. This same command must be ran for all job numbers all the way to 6417. All these jobs together perform billions of statistical tests each of which produces a p value for a feature pair that’s compared. Every feature in the data set is compared to every other feature after all 6,418 jobs are complete. The output of each job is a mapping from the comparison pair (two headers) to the p-value obtained performing the correlation test between that pair of features. All of these 6,418 mappings combine to contain the entirety of comparisons throughout all the features in the data set which amounts to 355,229,668,828 total statistical tests.
+*See Table 1 in the supplemental materials under "Correlation Analysis On The Entire Data Set" for resource usage information for this command.* The 0 argument in the above command refers to the job number. This same command must be ran for all job numbers all the way to 6417. All these jobs together perform a total of 355,229,668,828 statistical tests, each of which produces a p-value for a feature pair that’s compared. But only the comparisons with a p-value below the bonferroni threshold are stored. Every feature in the data set is compared to every other feature after all 6,418 jobs are complete. The output of each job is a mapping from the comparison pair (two headers) to the p-value obtained performing the correlation test between that pair of features.
+<br>
+The mappings that are output from these jobs will not all be the same size since different parts of the total set of comparisons had more significant comparisons than others. This means that some of the output files of the above 6,418 jobs will have different sizes than others, which will make determining resource allocation of future analysis difficult. This can be resolved by rearranging the file contents such that they all have approximately equal size by executing the following:
+```
+bash jobs/even-comp-dicts.sh data/comp-dicts 13200000
+```
 ## Counting Comparisons For The Entire Data Set <a name="header10"></a>
 The test results can now be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.4075400899075716e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
 ```
@@ -224,10 +229,6 @@ bash jobs/alpha-filter.sh comp-dicts bonferroni 0 5
 ```
 *See Table 1 in the supplemental materials under "Filtering Comparisons By Bonferroni Alpha" for resource usage information for this command.* The 0 argument indicates the index of the section to perform, similar to the intermediate counts table jobs. This also needs to be performed from index 0 to index 1293 for a total of 1,294 jobs.
 <br>
-The output of these jobs will not all be the same size since different parts of the total set of comparisons had more significant comparisons than others. This means that some of the output files of the above 1294 jobs will have different sizes than others, which will make determining resource allocation of future analysis difficult. This can be resolved by rearranging the file contents such that they all have approximately equal size by executing the following:
-```
-bash jobs/even-filtered-dicts.sh bonferroni
-```
 *See Table 1 in the supplemental materials under "Equalize The Size Of The Files Containing The Bonferroni Alpha Filtered Comparisons" for resource usage information for this command.* Next link the maps of patient ID to feature value to the correlation analysis data directory:
 ```
 cd data/
