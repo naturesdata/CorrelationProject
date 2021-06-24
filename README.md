@@ -285,3 +285,6 @@ bash jobs/significance-summary.sh bonferroni 100
 ```
 # TODO: Include resource/timing info here
 This concludes the complete reproduction of the project.
+
+# TODO: "this, that, these, those" need to be followed by (a) noun(s). Do a CTL+F.
+# TODO: For time estimates say in parenthesis (Estimated Time: {time}) rather than "this might take..."
