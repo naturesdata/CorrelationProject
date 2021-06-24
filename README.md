@@ -207,6 +207,7 @@ The mappings that are output from these jobs will not all be the same size since
 ```
 bash jobs/even-comp-dicts.sh data/comp-dicts 13200000
 ```
+*See Table 1 in the supplemental materials under "Equalize The Size Of The Files Containing The Comparisons" for resource usage information for this command.*
 ## Counting Comparisons For The Entire Data Set <a name="header10"></a>
 The test results can now be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.4075400899075716e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
 ```
