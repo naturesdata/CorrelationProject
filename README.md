@@ -11,9 +11,9 @@
 9. [Creating The Final Data Set](#header7)
 10. [Preparing For The Correlation Analysis](#header8)
 11. [Performing The Correlation Analysis](#header9)
-12. [Counting Comparisons For The Entire Data Set](#header10)
-13. [Counting Comparisons For The Confounding Variable Sub Sets](#header11)
-14. [Feature Frequency Of Highly Significant Comparisons](#header12)
+12. [Feature Frequency Of Significant Comparisons](#header10)
+13. [Counting Comparisons For The Entire Data Set](#header11)
+14. [Counting Comparisons For The Confounding Variable Sub Sets](#header12)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -208,7 +208,31 @@ The mappings that are output from these jobs will not all be the same size since
 bash jobs/even-comp-dicts.sh data/comp-dicts 13200000
 ```
 *See Table 1 in the supplemental materials under "Equalize The Size Of The Files Containing The Comparisons" for resource usage information for this command.*
-## Counting Comparisons For The Entire Data Set <a name="header10"></a>
+## Feature Frequency Of Significant Comparisons <a name="header10"></a>
+The next part of the analysis is to obtain the mapping of features to the frequency which they appear in significant comparisons. Before such a mapping can be created for features which appeared in *maximally* significant comparisons, we must filter the comparisons, selecting only the maximally significant ones:
+```
+bash jobs/alpha-filter.sh data/comp-dicts 5e-324 0 5 data/maximum-filtered
+```
+*See Table 1 in the supplemental materials under "Filtering Comparisons By Maximum Alpha" for resource usage information for this command.* The above command needs to be ran from index 0 to 852. The mappings for both Bonferroni significance and maximum significance can be made by executing the following:
+```
+bash jobs/significance-frequencies.sh bonferroni
+```
+*See Table 1 in the supplemental materials under "Getting The Significant Comparison Frequencies For Features By Bonferroni Alpha" for resource usage information for this command.*
+```
+bash jobs/significance-frequencies.sh maximum
+```
+This might take up to eleven minutes.
+<br>
+These results can be summarized by executing the following:
+```
+bash jobs/significance-summary.sh maximum 100
+```
+This might take less than a minute.
+```
+bash jobs/significance-summary.sh bonferroni 100
+```
+# TODO: Include resource/timing info here
+## Counting Comparisons For The Entire Data Set <a name="header11"></a>
 The test results can now be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.4075400899075716e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
 ```
 bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 data-type
@@ -223,7 +247,7 @@ bash jobs/counts-table.sh data-type
 bash jobs/counts-table.sh domain
 ```
 The above commands might take about four minutes to complete.
-## Counting Comparisons For The Confounding Variable Sub Sets <a name="header11"></a>
+## Counting Comparisons For The Confounding Variable Sub Sets <a name="header12"></a>
 The counts tables give us valuable information including how many of the comparisons of a given type were of a specified significance level. However, we also need to know which comparisons were below a certain alpha (not just the number of comparisons but the comparisons themselves). We can filter the comparisons that were above the Bonferroni alpha, keeping those which are below the Bonferroni alpha, by executing the following:
 ```
 bash jobs/alpha-filter.sh comp-dicts bonferroni 0 5
@@ -260,31 +284,5 @@ bash jobs/counts-table.sh data-type 0.0
 bash jobs/counts-table.sh domain 0.0
 ```
 The 0.0 in the above commands again represents the 0.0 subset and the same commands must be ran for all the other sub sets as well. This concludes the counting and should result in ten additional counts tables.
-## Feature Frequency Of Highly Significant Comparisons <a name="header12"></a>
-The next part of the analysis is to obtain the mapping of features to the frequency which they appear in significant comparisons. Before such a mapping can be created for features which appeared in maximally significant comparisons, we must filter the comparisons again but this time only selecting the maximally significant ones:
-```
-bash jobs/alpha-filter.sh comp-dicts maximum 0 5
-```
-*See Table 1 in the supplemental materials under "Filtering Comparisons By Maximum Alpha" for resource usage information for this command.* The above command needs to be ran from index 0 to 1293 like before. The mappings for both Bonferroni significance and maximum significance can be made by executing the following:
-```
-bash jobs/significance-frequencies.sh bonferroni
-```
-*See Table 1 in the supplemental materials under "Getting The Significant Comparison Frequencies For Features By Bonferroni Alpha" for resource usage information for this command.*
-```
-bash jobs/significance-frequencies.sh maximum
-```
-This might take up to eleven minutes.
 <br>
-These results can be summarized by executing the following:
-```
-bash jobs/significance-summary.sh maximum 100
-```
-This might take less than a minute.
-```
-bash jobs/significance-summary.sh bonferroni 100
-```
-# TODO: Include resource/timing info here
 This concludes the complete reproduction of the project.
-
-# TODO: "this, that, these, those" need to be followed by (a) noun(s). Do a CTL+F.
-# TODO: For time estimates say in parenthesis (Estimated Time: {time}) rather than "this might take..."
