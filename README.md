@@ -248,13 +248,7 @@ bash jobs/counts-table.sh domain
 ```
 The above commands might take about four minutes to complete.
 ## Counting Comparisons For The Confounding Variable Sub Sets <a name="header12"></a>
-The counts tables give us valuable information including how many of the comparisons of a given type were of a specified significance level. However, we also need to know which comparisons were below a certain alpha (not just the number of comparisons but the comparisons themselves). We can filter the comparisons that were above the Bonferroni alpha, keeping those which are below the Bonferroni alpha, by executing the following:
-```
-bash jobs/alpha-filter.sh comp-dicts bonferroni 0 5
-```
-*See Table 1 in the supplemental materials under "Filtering Comparisons By Bonferroni Alpha" for resource usage information for this command.* The 0 argument indicates the index of the section to perform, similar to the intermediate counts table jobs. This also needs to be performed from index 0 to index 1293 for a total of 1,294 jobs.
-<br>
-*See Table 1 in the supplemental materials under "Equalize The Size Of The Files Containing The Bonferroni Alpha Filtered Comparisons" for resource usage information for this command.* Next link the maps of patient ID to feature value to the correlation analysis data directory:
+Next link the maps of patient ID to feature value to the correlation analysis data directory:
 ```
 cd data/
 ln -s ../../DataClean/processed-data/feat-maps/ ./feat-maps
@@ -270,7 +264,7 @@ bash jobs/create-subset.sh cdglobal
 ```
 This might take up to two minutes. Now that the sub sets have been created, the same analysis as before can be performed on the sub sets only for those comparisons which passed the Bonferroni corrected alpha:
 ```
-bash jobs/col-comparison-subset.sh 0 0.0
+bash jobs/col-comparison-subset.sh 0 0.0 data/comp-dicts
 ```
 *See Table 1 in the supplemental materials under "Re-Run Only The Significant Comparisons On The Subsets" for resource usage information for this command.* In the data set, clinical dementia rating has numbers representing the categorical values with 0.0, 0.5, and 1.0 representing controls, mild cognitive impairment, and AD respectively. The 0.0 argument in the above command represents the healthy controls sub set that was created earlier. The above command must be executed using an argument of 0.5 and 1.0 as well. Additionally, the above command must be executed for each sex (i.e. male and female). Finally, each of those five commands must be ran for every index. The 0 argument in the above command represents the 0 index and the commands must be ran up to index 1293 for a total of 5 * 1294 = 6,470 total jobs.
 <br>
