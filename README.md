@@ -232,6 +232,12 @@ This might take less than a minute.
 bash jobs/significance-summary.sh bonferroni 100
 ```
 # TODO: Include resource/timing info here
+
+
+
+
+
+
 ## Counting Comparisons For The Entire Data Set <a name="header11"></a>
 The test results can now be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.4075400899075716e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
 ```
@@ -247,6 +253,12 @@ bash jobs/counts-table.sh data-type
 bash jobs/counts-table.sh domain
 ```
 The above commands might take about four minutes to complete.
+
+
+
+
+
+
 ## Counting Comparisons For The Confounding Variable Sub Sets <a name="header12"></a>
 Next link the maps of patient ID to feature value to the correlation analysis data directory:
 ```
@@ -262,12 +274,22 @@ This might take up to two minutes. Clinical dementia rating is also a potential 
 ```
 bash jobs/create-subset.sh cdglobal
 ```
-This might take up to two minutes. Now that the sub sets have been created, the same analysis as before can be performed on the sub sets only for those comparisons which passed the Bonferroni corrected alpha:
+This might take up to two minutes. 
+Now that the sub sets have been created, the same analysis as before can be performed on the sub sets only for those comparisons which passed the maximumally significant alpha. First, we need to make those files all the same size by running the following:
 ```
-bash jobs/col-comparison-subset.sh 0 0.0 data/comp-dicts
+bash jobs/even-comp-dicts.sh data/maximum-filtered 30000
 ```
-*See Table 1 in the supplemental materials under "Re-Run Only The Significant Comparisons On The Subsets" for resource usage information for this command.* In the data set, clinical dementia rating has numbers representing the categorical values with 0.0, 0.5, and 1.0 representing controls, mild cognitive impairment, and AD respectively. The 0.0 argument in the above command represents the healthy controls sub set that was created earlier. The above command must be executed using an argument of 0.5 and 1.0 as well. Additionally, the above command must be executed for each sex (i.e. male and female). Finally, each of those five commands must be ran for every index. The 0 argument in the above command represents the 0 index and the commands must be ran up to index 1293 for a total of 5 * 1294 = 6,470 total jobs.
+This might take about 40 minutes. Now the sub set analysis can be performed.
+```
+bash jobs/col-comparison-subset.sh 0 0.0 data/maximum-filtered
+```
+*See Table 1 in the supplemental materials under "Re-Run Only The Most Significant Comparisons On The Subsets" for resource usage information for this command.* In the data set, clinical dementia rating has numbers representing the categorical values with 0.0, 0.5, and 1.0 representing controls, mild cognitive impairment, and AD respectively. The 0.0 argument in the above command represents the healthy controls sub set that was created earlier. The above command must be executed using an argument of 0.5 and 1.0 as well. Additionally, the above command must be executed for each sex (i.e. male and female). Finally, each of those five commands must be ran for every index. The 0 argument in the above command represents the 0 index and the commands must be ran up to index 2955 for a total of 5 * 2,956 = 14,780  jobs.
 <br>
+
+
+
+
+
 After the analysis has been performed on each of the sub sets, the intermediate counts tables need to be created for each of them by executing the following:
 ```
 bash jobs/inter-counts-table.sh 0.0-comp-dicts 1e-100 0 1 data-type 0.0
