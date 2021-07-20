@@ -215,21 +215,27 @@ bash jobs/alpha-filter.sh data/comp-dicts 5e-324 0 5 data/maximum-filtered
 ```
 *See Table 1 in the supplemental materials under "Filtering Comparisons By Maximum Alpha" for resource usage information for this command.* The above command needs to be ran from index 0 to 852. The mappings for both Bonferroni significance and maximum significance can be made by executing the following:
 ```
-bash jobs/significance-frequencies.sh bonferroni
+bash jobs/sig-freqs.sh data/comp-dicts data/bonferroni-sig-freqs.p
 ```
 *See Table 1 in the supplemental materials under "Getting The Significant Comparison Frequencies For Features By Bonferroni Alpha" for resource usage information for this command.*
 ```
-bash jobs/significance-frequencies.sh maximum
+bash jobs/sig-freqs-table.sh data/bonferroni-sig-freqs.p data/bonferroni-sig-freqs.csv
 ```
-This might take up to eleven minutes.
-<br>
-These results can be summarized by executing the following:
+*See Table 1 in the supplemental materials under "Creating The Significant Comparison Frequencies Table" for resource usage information for this command.*
 ```
-bash jobs/significance-summary.sh maximum 100
+bash jobs/sig-freqs.sh data/maximum-filtered/ data/maximum-sig-freqs.p
 ```
-This might take less than a minute.
+This might take up to 4 minutes.
 ```
-bash jobs/significance-summary.sh bonferroni 100
+bash jobs/sig-freqs-table.sh data/maximum-sig-freqs.p data/maximum-sig-freqs.csv
+```
+This might take 9 minutes. These results can be summarized by executing the following:
+```
+bash jobs/sig-freqs-summary.sh maximum 100 data/maximum-sig-freqs.csv
+```
+This might take up to 2 minutes.
+```
+bash jobs/significance-summary.sh bonferroni 100 data/bonferroni-sig-freqs.csv
 ```
 # TODO: Include resource/timing info here
 
