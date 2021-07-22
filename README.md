@@ -235,7 +235,7 @@ bash jobs/sig-freqs-summary.sh maximum 100 data/maximum-sig-freqs.csv
 ```
 This might take up to 2 minutes.
 ```
-bash jobs/significance-summary.sh bonferroni 100 data/bonferroni-sig-freqs.csv
+bash jobs/sig-freqs-summary.sh bonferroni 100 data/bonferroni-sig-freqs.csv
 ```
 # TODO: Include resource/timing info here
 
