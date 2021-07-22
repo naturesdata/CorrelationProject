@@ -209,11 +209,11 @@ bash jobs/even-comp-dicts.sh data/comp-dicts 13200000
 ```
 *See Table 1 in the supplemental materials under "Equalize The Size Of The Files Containing The Comparisons" for resource usage information for this command.*
 ## Feature Frequency Of Significant Comparisons <a name="header10"></a>
-The next part of the analysis is to obtain the mapping of features to the frequency which they appear in significant comparisons. Before such a mapping can be created for features which appeared in *maximally* significant comparisons, we must filter the comparisons, selecting only the maximally significant ones:
+The next part of the analysis is to obtain the mapping of features to the frequency which they appear in significant comparisons separated by domain. Before such a mapping can be created for features which appeared in *maximally* significant comparisons, we must filter the comparisons, selecting only the maximally significant ones:
 ```
 bash jobs/alpha-filter.sh data/comp-dicts 5e-324 0 5 data/maximum-filtered
 ```
-*See Table 1 in the supplemental materials under "Filtering Comparisons By Maximum Alpha" for resource usage information for this command.* The above command needs to be ran from index 0 to 852. The mappings for both Bonferroni significance and maximum significance can be made by executing the following:
+*See Table 1 in the supplemental materials under "Filtering Comparisons By Maximum Alpha" for resource usage information for this command.* The above command needs to be ran from index 0 to 852. The feature-to-frequency mappings for both Bonferroni significance and maximum significance can be made into CSV format by executing the following:
 ```
 bash jobs/sig-freqs.sh data/comp-dicts data/bonferroni-sig-freqs.p
 ```
@@ -229,15 +229,15 @@ This might take up to 4 minutes.
 ```
 bash jobs/sig-freqs-table.sh data/maximum-sig-freqs.p data/maximum-sig-freqs.csv
 ```
-This might take 9 minutes. These results can be summarized by executing the following:
+This might take up to 9 minutes. These results can be summarized by executing the following:
 ```
 bash jobs/sig-freqs-summary.sh maximum 100 data/maximum-sig-freqs.csv
 ```
-This might take up to 2 minutes.
+This might take up to 4 seconds.
 ```
 bash jobs/sig-freqs-summary.sh bonferroni 100 data/bonferroni-sig-freqs.csv
 ```
-# TODO: Include resource/timing info here
+This might take up to 12 seconds.
 
 
 
