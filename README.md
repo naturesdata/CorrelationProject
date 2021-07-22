@@ -13,7 +13,7 @@
 11. [Performing The Correlation Analysis](#header9)
 12. [Feature Frequency Of Significant Comparisons](#header10)
 13. [Counting Comparisons For The Entire Data Set](#header11)
-14. [Counting Comparisons For The Confounding Variable Sub Sets](#header12)
+14. [Feature Frequency For The Confounding Variable Sub Sets](#header12)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -221,7 +221,7 @@ bash jobs/sig-freqs.sh data/comp-dicts data/bonferroni-sig-freqs.p
 ```
 bash jobs/sig-freqs-table.sh data/bonferroni-sig-freqs.p data/bonferroni-sig-freqs.csv
 ```
-*See Table 1 in the supplemental materials under "Creating The Significant Comparison Frequencies Table" for resource usage information for this command.*
+*See Table 1 in the supplemental materials under "Creating The Significant Comparison Frequencies Table For Bonferroni Alpha" for resource usage information for this command.*
 ```
 bash jobs/sig-freqs.sh data/maximum-filtered/ data/maximum-sig-freqs.p
 ```
@@ -265,7 +265,7 @@ The above commands might take about four minutes to complete.
 
 
 
-## Counting Comparisons For The Confounding Variable Sub Sets <a name="header12"></a>
+## Feature Frequency For The Confounding Variable Sub Sets <a name="header12"></a>
 Next link the maps of patient ID to feature value to the correlation analysis data directory:
 ```
 cd data/
@@ -291,6 +291,35 @@ bash jobs/col-comparison-subset.sh 0 0.0 data/maximum-filtered
 ```
 *See Table 1 in the supplemental materials under "Re-Run Only The Most Significant Comparisons On The Subsets" for resource usage information for this command.* In the data set, clinical dementia rating has numbers representing the categorical values with 0.0, 0.5, and 1.0 representing controls, mild cognitive impairment, and AD respectively. The 0.0 argument in the above command represents the healthy controls sub set that was created earlier. The above command must be executed using an argument of 0.5 and 1.0 as well. Additionally, the above command must be executed for each sex (i.e. male and female). Finally, each of those five commands must be ran for every index. The 0 argument in the above command represents the 0 index and the commands must be ran up to index 2955 for a total of 5 * 2,956 = 14,780  jobs.
 <br>
+After the analysis has been performed on each of the sub sets, the mappings of features to the frequency that they appear in significant comparisons (same mapping as above but for the sub set comparisons) can be made by executing the following:
+```
+bash jobs/sig-freqs.sh data/male-comp-dicts/ data/male-sig-freqs.p
+bash jobs/sig-freqs.sh data/female-comp-dicts/ data/female-sig-freqs.p
+bash jobs/sig-freqs.sh data/0.0-comp-dicts/ data/0.0-sig-freqs.p
+bash jobs/sig-freqs.sh data/0.5-comp-dicts/ data/0.5-sig-freqs.p
+bash jobs/sig-freqs.sh data/1.0-comp-dicts/ data/1.0-sig-freqs.p
+```
+Each of the above commands might take up to 4 minutes. Next the respective tables can be made:
+```
+bash jobs/sig-freqs-table.sh data/male-sig-freqs.p data/male-sig-freqs.csv
+bash jobs/sig-freqs-table.sh data/female-sig-freqs.p data/female-sig-freqs.csv
+bash jobs/sig-freqs-table.sh data/0.0-sig-freqs.p data/0.0-sig-freqs.csv
+bash jobs/sig-freqs-table.sh data/0.5-sig-freqs.p data/0.5-sig-freqs.csv
+bash jobs/sig-freqs-table.sh data/1.0-sig-freqs.p data/1.0-sig-freqs.csv
+```
+Each of the above commands might take up to 10 minutes. Finally, the results can be summarized:
+```
+bash jobs/sig-freqs-summary.sh male 100 data/male-sig-freqs.csv
+bash jobs/sig-freqs-summary.sh female 100 data/female-sig-freqs.csv
+bash jobs/sig-freqs-summary.sh 0.0 100 data/0.0-sig-freqs.csv
+bash jobs/sig-freqs-summary.sh 0.5 100 data/0.5-sig-freqs.csv
+bash jobs/sig-freqs-summary.sh 1.0 100 data/1.0-sig-freqs.csv
+```
+Each of the above commands might take up to 5 seconds.
+
+
+
+
 
 
 
@@ -306,5 +335,10 @@ bash jobs/counts-table.sh data-type 0.0
 bash jobs/counts-table.sh domain 0.0
 ```
 The 0.0 in the above commands again represents the 0.0 subset and the same commands must be ran for all the other sub sets as well. This concludes the counting and should result in ten additional counts tables.
+
+
+
+
+
 <br>
 This concludes the complete reproduction of the project.
