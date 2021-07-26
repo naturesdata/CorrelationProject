@@ -294,7 +294,7 @@ The test results can now be counted by category. The category that a test result
 ```
 bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 data-type
 ```
-*See Table 1 in the supplemental materials under "Counting All The Comparisons By Data Type" for resource usage information for this command.* The 0 argument refers to the job index similar to training the MRI autoencoders and performing all the statistical tests. This time there are a total of 1,294 jobs that need to be ran so the above command must be ran from job index 0 to job index 1293. The same thing must additionally be done for the domain counts table as compared to the data-type counts table. That can be done by executing the above command for each job index but this time replacing data-type with domain as seen below:
+*See Table 1 in the supplemental materials under "Counting All The Comparisons By Data Type" for resource usage information for this command.* The 0 argument refers to the job index similar to training the MRI autoencoders and performing all the statistical tests. This time there are a total of 1,294 jobs that need to be ran so the above command must be ran from job index 0 to job index 1293. The same thing must additionally be done for the domain counts table as compared to the data-type counts table. Those steps can be done by executing the above command for each job index but this time replacing data-type with domain as seen below:
 ```
 bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 domain
 ```
