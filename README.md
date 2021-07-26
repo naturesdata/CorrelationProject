@@ -12,8 +12,8 @@
 10. [Preparing For The Correlation Analysis](#header8)
 11. [Performing The Correlation Analysis](#header9)
 12. [Feature Frequency Of Significant Comparisons](#header10)
-13. [Counting Comparisons For The Entire Data Set](#header11)
-14. [Feature Frequency For The Confounding Variable Sub Sets](#header12)
+13. [Feature Frequency For The Confounding Variable Sub Sets](#header11)
+14. [Counting Comparisons](#header12)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -238,34 +238,7 @@ This might take up to 4 seconds.
 bash jobs/sig-freqs-summary.sh bonferroni 100 data/bonferroni-sig-freqs.csv
 ```
 This might take up to 12 seconds.
-
-
-
-
-
-
-## Counting Comparisons For The Entire Data Set <a name="header11"></a>
-The test results can now be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.4075400899075716e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
-```
-bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 data-type
-```
-*See Table 1 in the supplemental materials under "Counting All The Comparisons By Data Type" for resource usage information for this command.* The 0 argument refers to the job index similar to training the MRI autoencoders and performing all the statistical tests. This time there are a total of 1,294 jobs that need to be ran so the above command must be ran from job index 0 to job index 1293. The same thing must additionally be done for the domain counts table as compared to the data-type counts table. That can be done by executing the above command for each job index but this time replacing data-type with domain as seen below:
-```
-bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 domain
-```
-*See Table 1 in the supplemental materials under "Counting All The Comparisons By Domain" for resource usage information for this command.* Rather than comparing counts by data type (numeric or nominal), this will create intermediate counts tables by domain (ADNIMERGE, Expression, or MRI). The counts in all the intermediate tables can be added together into one by executing the following:
-```
-bash jobs/counts-table.sh data-type
-bash jobs/counts-table.sh domain
-```
-The above commands might take about four minutes to complete.
-
-
-
-
-
-
-## Feature Frequency For The Confounding Variable Sub Sets <a name="header12"></a>
+## Feature Frequency For The Confounding Variable Sub Sets <a name="header11"></a>
 Next link the maps of patient ID to feature value to the correlation analysis data directory:
 ```
 cd data/
@@ -316,15 +289,22 @@ bash jobs/sig-freqs-summary.sh 0.5 100 data/0.5-sig-freqs.csv
 bash jobs/sig-freqs-summary.sh 1.0 100 data/1.0-sig-freqs.csv
 ```
 Each of the above commands might take up to 5 seconds.
-
-
-
-
-
-
-
-
-
+## Counting Comparisons For The Entire Data Set <a name="header12"></a>
+The test results can now be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.4075400899075716e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
+```
+bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 data-type
+```
+*See Table 1 in the supplemental materials under "Counting All The Comparisons By Data Type" for resource usage information for this command.* The 0 argument refers to the job index similar to training the MRI autoencoders and performing all the statistical tests. This time there are a total of 1,294 jobs that need to be ran so the above command must be ran from job index 0 to job index 1293. The same thing must additionally be done for the domain counts table as compared to the data-type counts table. That can be done by executing the above command for each job index but this time replacing data-type with domain as seen below:
+```
+bash jobs/inter-counts-table.sh comp-dicts 1e-100 0 5 domain
+```
+*See Table 1 in the supplemental materials under "Counting All The Comparisons By Domain" for resource usage information for this command.* Rather than comparing counts by data type (numeric or nominal), this will create intermediate counts tables by domain (ADNIMERGE, Expression, or MRI). The counts in all the intermediate tables can be added together into one by executing the following:
+```
+bash jobs/counts-table.sh data-type
+bash jobs/counts-table.sh domain
+```
+The above commands might take about four minutes to complete.
+<br>
 After the analysis has been performed on each of the sub sets, the intermediate counts tables need to be created for each of them by executing the following:
 ```
 bash jobs/inter-counts-table.sh 0.0-comp-dicts 1e-100 0 1 data-type 0.0
@@ -335,10 +315,5 @@ bash jobs/counts-table.sh data-type 0.0
 bash jobs/counts-table.sh domain 0.0
 ```
 The 0.0 in the above commands again represents the 0.0 subset and the same commands must be ran for all the other sub sets as well. This concludes the counting and should result in ten additional counts tables.
-
-
-
-
-
 <br>
 This concludes the complete reproduction of the project.
