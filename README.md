@@ -245,7 +245,7 @@ cd data/
 ln -s ../../DataClean/processed-data/feat-maps/ ./feat-maps
 cd ../
 ```
-This directory includes a mapping from patient ID to sex and one from patient ID to clinical dementia rating. These will be used to create the sub sets of the data set which only contain the patients which have a specified value for these two potentially confounding variables. There will be a sub set which only contains male patients and one which only contains female patients. Create these two subsets by executing the following:
+This directory includes a mapping from patient ID to sex and one from patient ID to clinical dementia rating. These mappings will be used to create the sub sets of the data set which only contain the patients which have a specified value for these two potentially confounding variables. There will be a sub set which only contains male patients and one which only contains female patients. Create these two subsets by executing the following:
 ```
 bash jobs/create-subset.sh ptgender
 ```
