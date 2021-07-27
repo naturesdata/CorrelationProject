@@ -2,18 +2,19 @@
 ## Table of Contents
 1. [Command Line Tools Required For This Project](#table1)
 2. [Downloadable ADNI Files Needed](#table2)
-3. [Cloning The Project Repository](#header1)
-4. [Creating The Raw ADNIMERGE Data Domain](#header2)
-5. [Creating The Python Virtual Environment](#header3)
-6. [Creating The Gene Expression Data Domain](#header5)
-7. [Creating The MRI Data Domain](#header6)
-8. [Completing The ADNIMERGE Data Domain](#header4)
-9. [Creating The Final Data Set](#header7)
-10. [Preparing For The Correlation Analysis](#header8)
-11. [Performing The Correlation Analysis](#header9)
-12. [Feature Frequency Of Significant Comparisons](#header10)
-13. [Feature Frequency For The Confounding Variable Sub Sets](#header11)
-14. [Counting Comparisons](#header12)
+3. [Required Computational Resources For Supercomputer](#table3)
+4. [Cloning The Project Repository](#header1)
+5. [Creating The Raw ADNIMERGE Data Domain](#header2)
+6. [Creating The Python Virtual Environment](#header3)
+7. [Creating The Gene Expression Data Domain](#header5)
+8. [Creating The MRI Data Domain](#header6)
+9. [Completing The ADNIMERGE Data Domain](#header4)
+10. [Creating The Final Data Set](#header7)
+11. [Preparing For The Correlation Analysis](#header8)
+12. [Performing The Correlation Analysis](#header9)
+13. [Feature Frequency Of Significant Comparisons](#header10)
+14. [Feature Frequency For The Confounding Variable Sub Sets](#header11)
+15. [Counting Comparisons](#header12)
 ## Command Line Tools Required For This Project <a name="table1"></a>
 | Tool   | Version |
 |--------|---------|
@@ -28,6 +29,13 @@
 |          Enrollment.zip          |         0.0016         |          0.064          |
 |   Image Collections Directories  |          1,200         |         48,000.0        |
 |          Study_Info.zip          |          0.272         |          10.88          |
+## Required Computational Resources For Supercomputer <a name="table3"></a>
+| Resource                          | Amount         |
+|-----------------------------------|----------------|
+| Minimum Hard Drive Space per Node | 3 Terabytes    |
+| Minimum RAM per Node              | 1600 Gigabytes |
+| Minimum Number Of Cores per Node  | 4              |
+| Minimum Number Of Nodes           | 200            |
 ## Cloning The Project Repository <a name="header1"></a>
 The repository can be cloned using the following commands:
 ```
