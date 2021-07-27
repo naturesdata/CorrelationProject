@@ -126,12 +126,12 @@ cd data/gene_expression
 unzip ADNI_Gene_Expression_Profile.zip
 cd ../..
 ```
-The gene expression data set can then be created by executing the following:
+The gene expression data domain can then be created by executing the following:
 ```
 cd DataClean/
 bash jobs/adni-expression.sh
 ```
-*See Table 1 in the supplemental materials under "Creating The Gene Expression Domain" for resource usage information for this command.*
+(Estimated Time: 3 minutes)
 ## Creating The MRI Data Domain <a name="header6"></a>
 To begin creating the MRI data domain, the directories containing the image files can be found at https://ida.loni.usc.edu/ under Download -> Image Collections. There are 2,432 directories, the name of each corresponds to a patient ID. All of these directories must be moved to `./data/mri/raw-adni/` for later steps. Most of these images will be filtered by taking the intersect of patient IDs with the patient IDs of the other domains (i.e. ADNIMERGE and gene expression). This intersect can be accomplished by first obtaining the intersecting patient IDs just between the ADNIMERGE data domain and gene expression data domain. 744 patient IDs intersect between these two domains, meaning they have 744 individuals in common. To create a file containing these intersecting patient IDs, execute the following:
 ```
