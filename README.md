@@ -30,12 +30,16 @@
 |   Image Collections Directories  |          1,200         |         48,000.0        |
 |          Study_Info.zip          |          0.272         |          10.88          |
 ## Required Computational Resources For Supercomputer <a name="table3"></a>
-| Resource                          | Amount         |
-|-----------------------------------|----------------|
-| Minimum Hard Drive Space per Node | 3 Terabytes    |
-| Minimum RAM per Node              | 1600 Gigabytes |
-| Minimum Number Of Cores per Node  | 4              |
-| Minimum Number Of Nodes           | 200            |
+| Resource                                      | Amount         |
+|-----------------------------------------------|----------------|
+| Minimum Hard Drive Space                      | 3 Terabytes    |
+| Minimum RAM For Highest Memory Node           | 1600 Gigabytes |
+| Minimum Number Of Cores per 128 Gigabyte Node | 4              |
+| Minimum Number Of 128 Gigabyte Nodes          | 50             |
+| Minimum Number of 64 Gigabyte Nodes           | 1              |
+| Minimum Number of 32 Gigabyte Nodes           | 1              |
+| Minimum Number of 16 Gigabyte Nodes           | 10             |
+| Minimum  GPU Memory per 16 Gigabyte Node      | 16 Gigabytes   |
 ## Cloning The Project Repository <a name="header1"></a>
 The repository can be cloned using the following commands:
 ```
