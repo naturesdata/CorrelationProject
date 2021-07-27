@@ -72,7 +72,7 @@ cd ..
 ```
 (Estimated Time: 14 minutes). This script uses the `known-vals.rds` file to create a list of sorted column names, saved in `sorted-col-names.rds`. They are sorted by the number of RIDs that have a known value for the corresponding column that will be created in the ADNIMERGE data domain. The list is sorted in descending order. This list enables the creation of a table where the leftmost column has the most known values while the rightmost column has the least known values.
 <br>
-Now using both `known-vals.rds` and `sorted-col-names.rds`, the raw data set can be made. It’s called raw because further processing will occur later using the python language rather than R.
+Now using both `known-vals.rds` and `sorted-col-names.rds`, the raw ADNIMERGE data domain can be made. It’s called raw because further processing will occur later using the python language rather than R.
 ```
 cd RawDataSet
 Rscript raw-data-set.r
@@ -80,21 +80,21 @@ cd ..
 ```
 (Estimated Time: 12 minutes). This script iterates though each column name, each iteration of which iterates through each RID. If an RID has a known value for a given column, it is added. Otherwise, a value of `NA` (not available) is added to the column. The resulting data frame is saved in `raw-data-set.rds`.
 <br>
-Next, the type of each column must be known to determine which statistical test is appropriate for each pair of columns. The data frame of column types has the same headers as the raw data set except for RID and only has a single row that contains an indicator of whether the corresponding column is numeric or nominal. This data frame is stored in `col-types.rds` and is created by executing the following:
+Next, the type of each column must be known to determine which statistical test is appropriate for each pair of columns. The data frame of column types has the same headers as the raw data domain except for RID and only has a single row that contains an indicator of whether the corresponding column is numeric or nominal. This data frame is stored in `col-types.rds` and is created by executing the following:
 ```
 cd ColTypes
 Rscript col-types.r
 cd ..
 ```
-(Estimated Time: 4 minutes). Column types are determined by the contents of the column itself. If the values are numerical and there’s enough unique values (more than 10), the column is deemed numeric. If the values are not of a numeric type, it’s deemed nominal. But headers are not included in the column types data frame if the column has only one unique value. Headers are also not included if the corresponding column is not numeric but has too many unique values (at least 20), and therefore couldn’t reasonably represent a categorical variable. Such columns typically didn’t have useful information for statistical analysis, but were often notes taken by the data recorders which were full English sentences, clearly not variables, but still made their way into the `ADNIMERGE` tables. In this way, the column types data frame is used to filter the raw data set, excluding those columns that are unfit.
+(Estimated Time: 4 minutes). Column types are determined by the contents of the column itself. If the values are numerical and there’s enough unique values (more than 10), the column is deemed numeric. If the values are not of a numeric type, it’s deemed nominal. But headers are not included in the column types data frame if the column has only one unique value. Headers are also not included if the corresponding column is not numeric but has too many unique values (at least 20), and therefore couldn’t reasonably represent a categorical variable. Such columns typically didn’t have useful information for statistical analysis, but were often notes taken by the data recorders which were full English sentences, clearly not variables, but still made their way into the `ADNIMERGE` tables. In this way, the column types data frame is used to filter the raw data domain, excluding those columns that are unfit.
 <br>
-The final step is converting the column types data frame and the raw data set data frame into CSV files to be combined with the gene expression domain and MRI domain after further processing. These CSV files, stored as `col-types.csv` and `raw-data-set.csv`, are created by executing the following:
+The final step is converting the column types data frame and the raw data domain data frame into CSV files to be combined with the gene expression domain and MRI domain after further processing. These CSV files, stored as `col-types.csv` and `raw-data-set.csv`, are created by executing the following:
 ```
 cd ToCSV
 Rscript to-csv.r
 cd ..
 ```
-(Estimated Time: several seconds). This script uses the headers of the column types data frame to select the acceptable columns from the raw data set, then both data frames are saved as CSV files. This step concludes the process for putting together the raw data set for the ADNIMERGE domain. Return to the root of the repository by executing:
+(Estimated Time: several seconds). This script uses the headers of the column types data frame to select the acceptable columns from the raw data domain, then both data frames are saved as CSV files. This step concludes the process for putting together the raw ADNIMERGE data domain. Return to the root of the repository by executing:
 ```
 cd ../..
 ```
