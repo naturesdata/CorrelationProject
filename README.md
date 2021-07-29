@@ -283,24 +283,39 @@ bash jobs/sig-freqs.sh data/female-comp-dicts/ data/female-sig-freqs.p
 bash jobs/sig-freqs.sh data/0.0-comp-dicts/ data/0.0-sig-freqs.p
 bash jobs/sig-freqs.sh data/0.5-comp-dicts/ data/0.5-sig-freqs.p
 bash jobs/sig-freqs.sh data/1.0-comp-dicts/ data/1.0-sig-freqs.p
+bash jobs/sig-freqs.sh data/male-comp-dicts/ data/male-filtered-sig-freqs.p 5e-324
+bash jobs/sig-freqs.sh data/female-comp-dicts/ data/female-filtered-sig-freqs.p 5e-324
+bash jobs/sig-freqs.sh data/0.0-comp-dicts/ data/0.0-filtered-sig-freqs.p 5e-324
+bash jobs/sig-freqs.sh data/0.5-comp-dicts/ data/0.5-filtered-sig-freqs.p 5e-324
+bash jobs/sig-freqs.sh data/1.0-comp-dicts/ data/1.0-filtered-sig-freqs.p 5e-324
 ```
-Each of the above commands might take up to 4 minutes. Next the respective tables can be made:
+(Estimated Time: 40 minutes). Next the respective tables can be made:
 ```
 bash jobs/sig-freqs-table.sh data/male-sig-freqs.p data/male-sig-freqs.csv
 bash jobs/sig-freqs-table.sh data/female-sig-freqs.p data/female-sig-freqs.csv
 bash jobs/sig-freqs-table.sh data/0.0-sig-freqs.p data/0.0-sig-freqs.csv
 bash jobs/sig-freqs-table.sh data/0.5-sig-freqs.p data/0.5-sig-freqs.csv
 bash jobs/sig-freqs-table.sh data/1.0-sig-freqs.p data/1.0-sig-freqs.csv
+bash jobs/sig-freqs-table.sh data/male-filtered-sig-freqs.p data/male-filtered-sig-freqs.csv
+bash jobs/sig-freqs-table.sh data/female-filtered-sig-freqs.p data/female-filtered-sig-freqs.csv
+bash jobs/sig-freqs-table.sh data/0.0-filtered-sig-freqs.p data/0.0-filtered-sig-freqs.csv
+bash jobs/sig-freqs-table.sh data/0.5-filtered-sig-freqs.p data/0.5-filtered-sig-freqs.csv
+bash jobs/sig-freqs-table.sh data/1.0-filtered-sig-freqs.p data/1.0-filtered-sig-freqs.csv
 ```
-Each of the above commands might take up to 10 minutes. Finally, the results can be summarized:
+(Estimated Time: 1 hour). Finally, the results can be summarized:
 ```
-bash jobs/sig-freqs-summary.sh male 100 data/male-sig-freqs.csv
-bash jobs/sig-freqs-summary.sh female 100 data/female-sig-freqs.csv
-bash jobs/sig-freqs-summary.sh 0.0 100 data/0.0-sig-freqs.csv
-bash jobs/sig-freqs-summary.sh 0.5 100 data/0.5-sig-freqs.csv
-bash jobs/sig-freqs-summary.sh 1.0 100 data/1.0-sig-freqs.csv
+bash jobs/sig-freqs-summary.sh male 100 data/male-sig-freqs.csv true
+bash jobs/sig-freqs-summary.sh female 100 data/female-sig-freqs.csv true
+bash jobs/sig-freqs-summary.sh 0.0 100 data/0.0-sig-freqs.csv true
+bash jobs/sig-freqs-summary.sh 0.5 100 data/0.5-sig-freqs.csv true
+bash jobs/sig-freqs-summary.sh 1.0 100 data/1.0-sig-freqs.csv true
+bash jobs/sig-freqs-summary.sh male-filtered 100 data/male-filtered-sig-freqs.csv true
+bash jobs/sig-freqs-summary.sh female-filtered 100 data/female-filtered-sig-freqs.csv true
+bash jobs/sig-freqs-summary.sh 0.0-filtered 100 data/0.0-filtered-sig-freqs.csv true
+bash jobs/sig-freqs-summary.sh 0.5-filtered 100 data/0.5-filtered-sig-freqs.csv true
+bash jobs/sig-freqs-summary.sh 1.0-filtered 100 data/1.0-filtered-sig-freqs.csv true
 ```
-Each of the above commands might take up to 5 seconds.
+(Estiamted Time: 1 minute)
 ## Counting Comparisons <a name="header12"></a>
 The test results can now be counted by category. The category that a test result is counted in depends on its significance level and the comparison type. There are two kinds of comparison types. One comparison type category is based on the data types of the two features being compared. The categories of this comparison type are numeric being compared to numeric, nominal to nominal, and numeric to nominal. The different significance levels are no significance (not even below 0.05), below 0.05, below the Bonferroni corrected alpha of 1.4075400899075716e-13, below the super alpha of 1e-100, and maximum significance (so significant that the p-value is lower than the minimum floating point value that can be displayed in the python programming language and as a result is reported as 0.0). Since there are hundreds of billions of test results, they need to be counted by several jobs. Below is the command for job 0:
 ```
